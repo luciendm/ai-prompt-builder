@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Prompt Builder</title>
+</head>
+<body>
+
+<h2>AI Prompt Builder</h2>
+
+<label>Situation</label><br>
+<textarea id="situation"></textarea><br><br>
+
+<label>Details</label><br>
+<textarea id="details"></textarea><br><br>
+
+<label>Question</label><br>
+<textarea id="question"></textarea><br><br>
+
+<button onclick="generatePrompt()">Generate Prompt</button>
+
+<pre id="output"></pre>
+
+<script>
+async function generatePrompt() {
+
+  const situation = document.getElementById('situation').value;
+  const details = document.getElementById('details').value;
+  const question = document.getElementById('question').value;
+
+  const prompt = `Situation: ${situation}
+Details: ${details}
+Question: ${question}`;
+
+  document.getElementById('output').innerText = "Generating...";
+
+  const res = await fetch('/api/generate', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ prompt })
+  });
+
+  const data = await res.json();
+  document.getElementById('output').innerText = data.result || "Error";
+}
+</script>
+
+</body>
+</html>
